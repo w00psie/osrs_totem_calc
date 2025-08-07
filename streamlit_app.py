@@ -79,7 +79,7 @@ items_needed = totems_needed * 4
 logs_needed = items_needed + totems_needed
 
 if item == Item.SHIELD:
-    items_needed = items_needed / 2
+    logs_needed = (items_needed * 2) + totems_needed
 col1, col2, col3 = st.columns(3)
 with col1:
     st.metric(label="Totems Needed:", value=f"{totems_needed:,}")
