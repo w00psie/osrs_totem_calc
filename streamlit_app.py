@@ -2,7 +2,9 @@ import math
 import streamlit as st
 from levels import xp_to_level, level_to_xp
 from helpers import (
+    TIME,
     Action,
+    Item,
     calc_totem_xp,
     calc_chance,
     calc_time,
@@ -72,8 +74,12 @@ totem_xp = calc_totem_xp(material, item)
 # Results
 # How many totems ya need?
 totems_needed = math.ceil(xp_diff / totem_xp)
-logs_needed = totems_needed * 5
 items_needed = totems_needed * 4
+
+logs_needed = items_needed + totems_needed
+
+if item == Item.SHIELD:
+    items_needed = items_needed / 2
 col1, col2, col3 = st.columns(3)
 with col1:
     st.metric(label="Totems Needed:", value=f"{totems_needed:,}")
@@ -86,8 +92,10 @@ with col2:
 with col3:
     st.metric(label="Items Needed:", value=f"{items_needed:,}")
 
-time_needed_cutting = calc_time(logs_needed, axe_type, material, curr_woodcutting_lvl)
-time_needed_fletching = (items_needed * 1.8) / 3600
+time_needed_cutting = calc_time(
+    logs_needed, axe_type, material, curr_woodcutting_lvl, item
+)
+time_needed_fletching = (items_needed * TIME.get(item)) / 3600
 with st.container():
     st.header("Time Needed")
     col1, col2 = st.columns(2)
@@ -98,7 +106,7 @@ with st.container():
         )
     with col2:
         st.metric(
-            label="Time to fletch bows:",
+            label="Time to fletch:",
             value=f"{(time_needed_fletching):.1f} hours",
             help="Does not take fletching knife into account",
         )

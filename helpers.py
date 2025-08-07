@@ -30,6 +30,7 @@ class Item(Enum):
     SHORTBOW = "Shortbow"
     LONGBOW = "Longbow"
     STAFF = "Staff"
+    SHIELD = "Shield"
 
 
 class Action(Enum):
@@ -39,6 +40,7 @@ class Action(Enum):
     CUT = "Cut"
 
 
+TIME = {Item.SHORTBOW: 1.8, Item.LONGBOW: 1.8, Item.STAFF: 1.8, Item.SHIELD: 4.2}
 WC_CHANCE = {
     Material.OAK: {
         Axe.BRONZE: [32, 100],
@@ -104,37 +106,37 @@ WC_CHANCE = {
 
 FLETCHING_STUFF = {
     Material.OAK: {
-        "Items": {Item.SHORTBOW: 16.5, Item.LONGBOW: 25},
+        "Items": {Item.SHORTBOW: 16.5, Item.LONGBOW: 25, Item.SHIELD: 50},
         Action.BUILD: 12.5,
         Action.ADD: 51.5,
         Action.CUT: 37.5,
     },
     Material.WILLOW: {
-        "Items": {Item.SHORTBOW: 33.3, Item.LONGBOW: 41.5},
+        "Items": {Item.SHORTBOW: 33.3, Item.LONGBOW: 41.5, Item.SHIELD: 83},
         Action.BUILD: 31.5,
         Action.ADD: 126,
         Action.CUT: 67.5,
     },
     Material.MAPLE: {
-        "Items": {Item.SHORTBOW: 50, Item.LONGBOW: 58.3},
+        "Items": {Item.SHORTBOW: 50, Item.LONGBOW: 58.3, Item.SHIELD: 116.5},
         Action.BUILD: 51,
         Action.ADD: 201,
         Action.CUT: 100,
     },
     Material.YEW: {
-        "Items": {Item.SHORTBOW: 67.5, Item.LONGBOW: 75},
+        "Items": {Item.SHORTBOW: 67.5, Item.LONGBOW: 75, Item.SHIELD: 150},
         Action.BUILD: 82,
         Action.ADD: 326,
         Action.CUT: 175,
     },
     Material.MAGIC: {
-        "Items": {Item.SHORTBOW: 83.3, Item.LONGBOW: 91.5},
+        "Items": {Item.SHORTBOW: 83.3, Item.LONGBOW: 91.5, Item.SHIELD: 183},
         Action.BUILD: 156,
         Action.ADD: 620,
         Action.CUT: 250,
     },
     Material.REDWOOD: {
-        "Items": {Item.STAFF: 10.5},
+        "Items": {Item.STAFF: 10.5, Item.SHIELD: 216},
         Action.BUILD: 222,
         Action.ADD: 725,
         Action.CUT: 380,
@@ -174,5 +176,5 @@ def calc_chance(axe: Axe, log: Material, level: int):
     return top / 256
 
 
-def calc_time(logs_needed: int, axe: Axe, log: Material, level: int):
+def calc_time(logs_needed: int, axe: Axe, log: Material, level: int, item: Item):
     return (logs_needed / (calc_chance(axe, log, level) / 2.4)) / 3600
