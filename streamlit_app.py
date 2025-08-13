@@ -13,6 +13,10 @@ from helpers import (
     FLETCHING_STUFF,
     Axe,
 )
+import requests
+
+url = "https://api.wiseoldman.net/v2"
+headers = {"Content-Type": "application/json"}
 
 
 # Just format options by using the enum value in title case
@@ -22,19 +26,49 @@ def format_option_title_case(option):
 
 st.title("Totem Calculator")
 # Make 3 columns for inputs
+player_fletch_xp = 0
+player_construction_xp = 0
+player_woodcutting_lvl = 1
+input_name = st.text_input(label="In Game Name")
+if input_name:
+    # get from wiseoldman
+    player_data = (
+        requests.post(url + f"/players/{input_name}", headers=headers)
+        .json()
+        .get("latestSnapshot")
+        .get("data")
+    )
+    if player_data:
+        player_fletch_xp = player_data.get("skills").get("fletching").get("experience")
+        player_construction_xp = (
+            player_data.get("skills").get("construction").get("experience")
+        )
+        player_woodcutting_lvl = (
+            player_data.get("skills").get("woodcutting").get("level")
+        )
+
 input_col1, input_col2, input_col3 = st.columns(3)
 
 with input_col1:
     curr_fletching_xp = st.number_input(
-        label="Current Fletching XP", min_value=0, value=0, max_value=level_to_xp(99)
+        label="Current Fletching XP",
+        min_value=0,
+        value=(player_fletch_xp),
+        max_value=level_to_xp(99),
     )
 with input_col2:
     curr_woodcutting_lvl = st.number_input(
-        label="Current Woodcutting Level", min_value=1, max_value=99, value=1
+        label="Current Woodcutting Level",
+        min_value=1,
+        max_value=99,
+        value=player_woodcutting_lvl,
     )
 with input_col3:
     curr_con_xp = st.number_input(
-        label="Current Construction XP", min_value=0, value=0, max_value=level_to_xp(99)
+        label="Current Construction XP",
+        min_value=0,
+        value=player_construction_xp,
+        max_value=level_to_xp(99),
     )
 
 
