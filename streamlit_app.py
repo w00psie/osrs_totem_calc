@@ -24,6 +24,7 @@ def format_option_title_case(option):
     return option.value.title()
 
 
+st.set_page_config(page_title="OSRS Vale Totem Calculator")
 st.title("Totem Calculator")
 # Make 3 columns for inputs
 player_fletch_xp = 0
