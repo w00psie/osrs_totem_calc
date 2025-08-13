@@ -32,20 +32,25 @@ player_woodcutting_lvl = 1
 input_name = st.text_input(label="In Game Name")
 if input_name:
     # get from wiseoldman
-    player_data = (
-        requests.post(url + f"/players/{input_name}", headers=headers)
-        .json()
-        .get("latestSnapshot")
-        .get("data")
-    )
-    if player_data:
-        player_fletch_xp = player_data.get("skills").get("fletching").get("experience")
-        player_construction_xp = (
-            player_data.get("skills").get("construction").get("experience")
+    try:
+        player_data = (
+            requests.post(url + f"/players/{input_name}", headers=headers)
+            .json()
+            .get("latestSnapshot")
+            .get("data")
         )
-        player_woodcutting_lvl = (
-            player_data.get("skills").get("woodcutting").get("level")
-        )
+        if player_data:
+            player_fletch_xp = (
+                player_data.get("skills").get("fletching").get("experience")
+            )
+            player_construction_xp = (
+                player_data.get("skills").get("construction").get("experience")
+            )
+            player_woodcutting_lvl = (
+                player_data.get("skills").get("woodcutting").get("level")
+            )
+    except Exception as e:
+        print(e)
 
 input_col1, input_col2, input_col3 = st.columns(3)
 
